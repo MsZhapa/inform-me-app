@@ -38,18 +38,18 @@ public class InformationAdapter extends ArrayAdapter<Information> {
 
 
         // Find the TextView with view ID magnitude
-        TextView titleView = (TextView) listItemView.findViewById(R.id.title);
+        TextView titleView = (TextView) listItemView.findViewById(R.id.article_title);
         // Format the magnitude to show 1 decimal place
         titleView.setText(currentArticle.getTitle());
 
-        TextView sectionView = (TextView) listItemView.findViewById(R.id.primary_location);
+        TextView sectionView = (TextView) listItemView.findViewById(R.id.article_section);
         sectionView.setText(currentArticle.getSection());
 
-        TextView authorView = (TextView) listItemView.findViewById(R.id.action_settings);
+        TextView authorView = (TextView) listItemView.findViewById(R.id.article_author);
         authorView.setText(currentArticle.getAuthor());
 
         // Find the TextView with view ID date
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
+        TextView dateView = (TextView) listItemView.findViewById(R.id.article_date);
 
         dateView.setText(currentArticle.getDate());
 

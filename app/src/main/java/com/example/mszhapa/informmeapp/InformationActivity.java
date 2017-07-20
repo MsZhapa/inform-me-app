@@ -33,7 +33,7 @@ public class InformationActivity extends AppCompatActivity
 
     //// TODO: 19/07/2017 RESOLVE QUERY
     /** URL for earthquake data from the USGS dataset */
-    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/search?";
+    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/";
     /**
      * Constant value for the earthquake loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
@@ -125,10 +125,11 @@ public class InformationActivity extends AppCompatActivity
         Uri baseUri = Uri.parse(USGS_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("format", "geojson");
-        uriBuilder.appendQueryParameter("limit", "10");
-        uriBuilder.appendQueryParameter("minmag", "9");
-        uriBuilder.appendQueryParameter("orderby", orderBy);
+        uriBuilder.appendPath("search");
+        uriBuilder.appendQueryParameter("order-by", "newest");
+        uriBuilder.appendQueryParameter("show-references", "author");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("api-key", "645b3de5-032d-45be-b61d-4e755fb91e8c");
 
         return new InformationLoader(this, uriBuilder.toString());
     }
