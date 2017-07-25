@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">Inform Me App</string>
-    <string name="inform_me_now">Inform Me Now</string>
-    <string name="preferences_title">Preferences</string>
+    <string name="app_name">InformMe App</string>
+    <string name="inform_me_now">InformMe Now</string>
 
     <string name="no_internet_connection">There is no Internet connection. Reconnect and try again!</string>
-    <string name="settings_order_by_key">Newest Articles</string>
-    <string name="settings_order_by_default">Default Order</string>
     <string name="no_articles">There are no articles to be displayed!</string>
+    <string name="news">Read the latest news from the Guardian, and stay informed!</string>
+    <string name="button">Check the latest news</string>
 
 </resources>

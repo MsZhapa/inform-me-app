@@ -15,31 +15,23 @@ import java.util.List;
 
 public class InformationAdapter extends ArrayAdapter<Information> {
 
-    String mTitle;
-    String mSection;
-    String mDate;
-    String mAuthor;
+    public InformationAdapter(Context context, List<Information> news) {
 
-    public InformationAdapter(Context context, List<Information> informations) {
-
-        super(context, 0, informations);
+        super(context, 0, news);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View listItemView = convertView;
-        if(listItemView == null)
-        {
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.information_list_item, parent, false);
         }
 
         Information currentArticle = getItem(position);
 
-
-        // Find the TextView with view ID magnitude
+        // Find and set the TextViews
         TextView titleView = (TextView) listItemView.findViewById(R.id.article_title);
-        // Format the magnitude to show 1 decimal place
         titleView.setText(currentArticle.getTitle());
 
         TextView sectionView = (TextView) listItemView.findViewById(R.id.article_section);
@@ -48,9 +40,7 @@ public class InformationAdapter extends ArrayAdapter<Information> {
         TextView authorView = (TextView) listItemView.findViewById(R.id.article_author);
         authorView.setText(currentArticle.getAuthor());
 
-        // Find the TextView with view ID date
         TextView dateView = (TextView) listItemView.findViewById(R.id.article_date);
-
         dateView.setText(currentArticle.getDate());
 
         return listItemView;

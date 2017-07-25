@@ -11,17 +11,21 @@ import java.util.List;
 
 public class InformationLoader extends AsyncTaskLoader<List<Information>> {
 
-    /** Tag for log messages */
+    /**
+     * Tag for log messages
+     */
     private static final String LOG_TAG = InformationLoader.class.getName();
 
-    /** Query URL */
+    /**
+     * Query URL
+     */
     private String mUrl;
 
     /**
      * Constructs a new {@link InformationLoader}.
      *
      * @param context of the activity
-     * @param url to load data from
+     * @param url     to load data from
      */
     public InformationLoader(Context context, String url) {
         super(context);
@@ -42,8 +46,8 @@ public class InformationLoader extends AsyncTaskLoader<List<Information>> {
             return null;
         }
 
-        // Perform the network request, parse the response, and extract a list of earthquakes.
-        List<Information> informations = QueryUtils.fetchInformationData(mUrl);
-        return informations;
+        // Perform the network request, parse the response, and extract a list of articles.
+        List<Information> news = QueryUtils.fetchInformationData(mUrl);
+        return news;
     }
 }

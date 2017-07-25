@@ -30,9 +30,8 @@ public class QueryUtils {
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
-
     /**
-     * Query the USGS dataset and return a list of {@link Information} objects.
+     * Query the guardian API and return a list of {@link Information} objects.
      */
     public static List<Information> fetchInformationData(String requestUrl) {
 
@@ -54,12 +53,11 @@ public class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-        List<Information> informations = extractFeatureFromJson(jsonResponse);
+        List<Information> news = extractFeatureFromJson(jsonResponse);
 
         // Return the list of {@link Earthquake}s
-        return informations;
+        return news;
     }
-
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -79,45 +77,43 @@ public class QueryUtils {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
-        List<Information> informations = new ArrayList<>();
+        // Create an empty ArrayList that we can start adding articles to
+        List<Information> news = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
-        //// TODO: 19/07/2017 CHECK THIS PART HERE AND CORRECT THE ATTRIBUTES IN JSON
         try {
 
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(informationJSON);
             JSONObject jsonResults = baseJsonResponse.getJSONObject("response");
 
-            // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or earthquakes).
-            JSONArray informationArray = jsonResults.getJSONArray("results"); //ceva gen article
+            // Extract the JSONArray associated with the key called "results"
+            JSONArray informationArray = jsonResults.getJSONArray("results");
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+            // For each article in the informationArray, create an {@link Information} object
             for (int i = 0; i < informationArray.length(); i++) {
 
-                // Get a single earthquake at position i within the list of earthquakes
+                // Get a single article at position i within the list of articles
                 JSONObject currentInformation = informationArray.getJSONObject(i);
 
-                // For a given earthquake, extract the JSONObject associated with the
-                // key called "properties", which represents a list of all properties
-                // for that earthquake.
+                // For a given article, extract the JSONObject associated with the
+                // key called "webTitle", which represents the title of the article
                 String title = currentInformation.getString("webTitle");
 
-                // Extract the value for the key called "place"
+                // Extract the value for the key called "sectionName"
                 String section = currentInformation.getString("sectionName");
 
-                // Extract the value for the key called "time"
+                // Extract the value for the key called "webPublicationDate"
                 String date = currentInformation.getString("webPublicationDate");
 
                 date = formatDate(date);
 
-                // Extract the value for the key called "url"
+                // Extract the value for the key called "webUrl"
                 String url = currentInformation.getString("webUrl");
 
+                // Extract the value for the key called "tags"
                 JSONArray tagsArray = currentInformation.getJSONArray("tags");
                 String author = "";
 
@@ -129,9 +125,8 @@ public class QueryUtils {
                         author += firstObject.getString("webTitle") + ". ";
                     }
                 }
-                // Create a new {@link Information} object with the magnitude, location, time,
-                // and url from the JSON response.
-                informations.add(new Information(title, author, section, date, url));
+                // Create a new {@link Information} object
+                news.add(new Information(title, author, section, date, url));
             }
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
@@ -139,8 +134,9 @@ public class QueryUtils {
             // with the message from the exception.
             Log.e("Queryutils", "Error parsing JSON response", e);
         }
-        return informations;
+        return news;
     }
+
     /**
      * Returns new URL object from the given string URL.
      */

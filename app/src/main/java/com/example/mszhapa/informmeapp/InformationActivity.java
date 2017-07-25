@@ -4,16 +4,11 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -31,19 +26,24 @@ public class InformationActivity extends AppCompatActivity
 
     private static final String LOG_TAG = InformationActivity.class.getName();
 
-    //// TODO: 19/07/2017 RESOLVE QUERY
-    /** URL for earthquake data from the USGS dataset */
-    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/";
     /**
-     * Constant value for the earthquake loader ID. We can choose any integer.
+     * URL for news data from the guardian
+     */
+    private static final String REQUEST_URL = "https://content.guardianapis.com/";
+    /**
+     * Constant value for the information loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int INFORMATION_LOADER_ID = 1;
 
-    /** Adapter for the list of earthquakes */
+    /**
+     * Adapter for the list of news
+     */
     private InformationAdapter mAdapter;
 
-    /** TextView that is displayed when the list is empty */
+    /**
+     * TextView that is displayed when the list is empty
+     */
     private TextView mEmptyStateTextView;
 
     @Override
@@ -59,7 +59,7 @@ public class InformationActivity extends AppCompatActivity
         informationListView.setEmptyView(mEmptyStateTextView);
 
 
-        // Create a new adapter that takes an empty list of earthquakes as input
+        // Create a new adapter that takes an empty list of news as input
         mAdapter = new InformationAdapter(this, new ArrayList<Information>());
 
         // Set the adapter on the {@link ListView}
@@ -67,7 +67,7 @@ public class InformationActivity extends AppCompatActivity
         informationListView.setAdapter(mAdapter);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
-        // to open a website with more information about the selected earthquake.
+        // to open a website with more information about the selected article.
         informationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -115,14 +115,7 @@ public class InformationActivity extends AppCompatActivity
     @Override
     public Loader<List<Information>> onCreateLoader(int i, Bundle bundle) {
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String orderBy = sharedPrefs.getString(
-                getString(R.string.settings_order_by_key),
-                getString(R.string.settings_order_by_default)
-        );
-//// TODO: 20/07/2017 fix these with right params for query 
-        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+        Uri baseUri = Uri.parse(REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         uriBuilder.appendPath("search");
@@ -135,7 +128,7 @@ public class InformationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Information>> loader, List<Information> informations) {
+    public void onLoadFinished(Loader<List<Information>> loader, List<Information> news) {
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
@@ -148,8 +141,8 @@ public class InformationActivity extends AppCompatActivity
 
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
-        if (informations != null && !informations.isEmpty()) {
-            mAdapter.addAll(informations);
+        if (news != null && !news.isEmpty()) {
+            mAdapter.addAll(news);
         }
     }
 
@@ -157,22 +150,5 @@ public class InformationActivity extends AppCompatActivity
     public void onLoaderReset(Loader<List<Information>> loader) {
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, PreferenceActivity.class);
-            startActivity(settingsIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
